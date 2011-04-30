@@ -1,7 +1,9 @@
 #import <UIKit/UIKit.h>
 #import "ReadItLaterLite.h"
 #import "UIProgressHUD.h"
+#import <UIKit/UITableViewController.h>
 
+//extend ActionSheet.
 __attribute__((visibility("hidden")))
 @interface WebViewController : UIViewController <UIActionSheetDelegate,UIWebViewDelegate,ReadItLaterDelegate> {
 }
@@ -28,22 +30,39 @@ UIProgressHUD *progressHUD;
 
 - (void)readItLaterSaveFinished:(NSString *)stringResponse error:(NSString *)errorString
 {
-	if (progressHUD) {		
-		[UIView beginAnimations: nil context: NULL];
-		[UIView setAnimationDuration: 0.2];
-		[progressHUD setAlpha:0.0f];
-		CGAffineTransform affine = CGAffineTransformMakeScale (1.5, 1.5);
-		[progressHUD setTransform: affine];
-		[UIView commitAnimations];		
-		[NSTimer scheduledTimerWithTimeInterval:0.2
+	if (progressHUD) {
+		if (stringResponse != nil) {
+			[progressHUD done];
+			[progressHUD setText:@"Success!"];
+			[self performSelector:@selector(progressHUDAffineToRemove) withObject:nil afterDelay:0.05];
+		} else {
+		[progressHUD setText:@"Error!"];
+		[NSTimer scheduledTimerWithTimeInterval:1.0
 																		 target:self
 																	 selector:@selector(endTimer:)
 																	 userInfo:nil
 																		repeats:NO];
+		}
 	}
 }
 
-- (void) endTimer:(NSTimer*)timer
+- (void)progressHUDAffineToRemove
+{
+		[UIView beginAnimations: nil context: NULL];
+		[UIView setAnimationDuration: 0.3];
+		[progressHUD setAlpha:0.0f];
+		CGAffineTransform affine = CGAffineTransformMakeScale (1.5, 1.5);
+		[progressHUD setTransform: affine];
+		[UIView commitAnimations];
+
+		[NSTimer scheduledTimerWithTimeInterval:0.3
+																		 target:self
+																	 selector:@selector(endTimer:)
+																	 userInfo:nil
+																		repeats:NO];
+}
+
+- (void)endTimer:(NSTimer*)timer
 {
 	[progressHUD hide];
 	[progressHUD release];
@@ -55,8 +74,9 @@ UIProgressHUD *progressHUD;
 
 %hook BookmarkEntry
 
-- (NSString*)title{
+- (NSString *)title{
 	globalTitle = %orig;
+	//NSLog(@"---------title:%@", globalTitle);
 	return globalTitle;
 }
 %end

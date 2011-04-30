@@ -13,5 +13,6 @@
 - (void)setText: (NSString *)text;
 - (void)showInView:(id)view;
 - (void)hide;
+- (void)done;
 - (UIProgressHUD *)initWithWindow: (UIView *)window;
 @end
