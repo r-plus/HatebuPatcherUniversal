@@ -2,7 +2,7 @@ Package: jp.r-plus.hatebupatcheruniversal
 Name: HatebuPatcherUniversal
 Depends: mobilesubstrate
 Conflicts: jp.r-plus.hatebupatcher, jp.r-plus.hatebu4ipadpatcher
-Version: 1.0
+Version: 1.01
 Architecture: iphoneos-arm
 Description: extend ActionSheet button to linkage Twitter.app and Read It Later.
 Maintainer: r_plus
